@@ -23,6 +23,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
 void initState() {
   super.initState();
+
+  refresh();
 }
 
   @override
@@ -60,7 +62,7 @@ void initState() {
               children: [
                 ListTile(
                   onLongPress: () {
-
+                    showFormModal(model: model);
                   },
                   onTap: () {
                     
@@ -118,7 +120,7 @@ void initState() {
               keyboardType: TextInputType.datetime,
               decoration: InputDecoration(
                 hintText: '01/01/2024',
-                labelText: "DAta"
+                labelText: "Data"
               ),
               inputFormatters: [dataMaskFormatter],
             ),
@@ -127,7 +129,7 @@ void initState() {
                 controller: minutesController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  hintText: '00:00', labelText: "horas trabalhadas"
+                  hintText: '00:00', labelText: "Horas trabalhadas"
                 ),
                 inputFormatters: [minutesMaskFormatter],
               ),
@@ -188,7 +190,20 @@ void initState() {
     refresh();
   }
 
-  void refresh() {}
+  Future<void> refresh() async {
+    List<Hour> temp = [];
+
+    QuerySnapshot<Map<String, dynamic>> snapshot = await firestore.collection(widget.user.uid).get();
+    for(var doc in snapshot.docs) {
+      temp.add(Hour.fromMap(doc.data()));
+    }
+
+     if (!mounted) return;
+
+    setState(() {
+      listHours = temp;
+    });
+  }
 }
 
 

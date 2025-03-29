@@ -58,13 +58,13 @@ class LoginScreen extends StatelessWidget {
                               );                           
                                 ScaffoldMessenger.of(context)
                                 .showSnackBar(snackBar);                            
-                            } else {                           
-                                Navigator.pop(context);                         
-                            }
+                            } 
                           });                       
                 }, child: Text("Entrar"),),
                 SizedBox(height: 16),
-                ElevatedButton(onPressed: (){}, child: Text("Entrar com google"),),
+                ElevatedButton(onPressed: (){
+
+                }, child: Text("Entrar com google"),),
                 SizedBox(height: 16),
                 TextButton(onPressed: () {
                   Navigator.push(context, 
