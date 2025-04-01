@@ -1,6 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:horas_v3/screens/register_screen.dart';
+import 'package:horas_v3/screens/reset_password_modal.dart';
 import 'package:horas_v3/services/auth_service.dart';
+
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -63,7 +67,7 @@ class LoginScreen extends StatelessWidget {
                 }, child: Text("Entrar"),),
                 SizedBox(height: 16),
                 ElevatedButton(onPressed: (){
-
+                  signInWithGoogle();
                 }, child: Text("Entrar com google"),),
                 SizedBox(height: 16),
                 TextButton(onPressed: () {
@@ -73,7 +77,16 @@ class LoginScreen extends StatelessWidget {
                       )
                   );
                 }, 
-                  child: Text("Ainda não tem uma conta? Crie uma conta"))
+                  child: Text("Ainda não tem uma conta? Crie uma conta")
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      showDialog(context: context, builder: (BuildContext context) {
+                        return ResetPasswordModal();
+                      });
+                    }, 
+                    child: Text("Esqueceu sua senha?"),
+                  )
                 ],
               )
               )
@@ -83,4 +96,45 @@ class LoginScreen extends StatelessWidget {
       )
     );
   }
+}
+
+// Future<UserCredential> singinWithGoogle() async {
+//   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+//   GoogleSignIn googleSignIn = GoogleSignIn(
+//     clientId: "1098286143288-vqla2r70kqkh7usu7ibp5k28mhv9dvt2.apps.googleusercontent.com",
+//     scopes: ['email'],
+// );
+//   final GoogleSignInAuthentication googleAuth = await googleUser!.authentication;
+//   final credential = GoogleAuthProvider.credential(
+//     accessToken: googleAuth.accessToken,
+//     idToken: googleAuth.idToken
+//   );
+  
+//   return await FirebaseAuth.instance.signInWithCredential(credential);
+// }
+
+Future<UserCredential> signInWithGoogle() async {
+  // Configurar o Google Sign-In com o Client ID correto
+  GoogleSignIn googleSignIn = GoogleSignIn(
+    clientId: "117359615510-74ei24q5gutag6ojvt1k5ut2o94mq4bm.apps.googleusercontent.com",
+    scopes: ['email'],
+  );
+
+  // Iniciar o fluxo de login
+  final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+  if (googleUser == null) {
+    throw Exception("Login cancelado pelo usuário");
+  }
+
+  // Obter autenticação do Google
+  final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+  // Criar credenciais para o Firebase
+  final AuthCredential credential = GoogleAuthProvider.credential(
+    accessToken: googleAuth.accessToken,
+    idToken: googleAuth.idToken,
+  );
+
+  // Autenticar no Firebase com as credenciais do Google
+  return await FirebaseAuth.instance.signInWithCredential(credential);
 }
