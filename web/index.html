@@ -26,6 +26,21 @@
   <meta name="apple-mobile-web-app-title" content="horas_v3">
   <meta name="google-signin-client_id" content="117359615510-74ei24q5gutag6ojvt1k5ut2o94mq4bm.apps.googleusercontent.com">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-messaging.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: web.apiKey,
+    authDomain: web.authDomain,
+    projectId: web.projectId,
+    storageBucket: web.storageBucket,
+    messagingSenderId: web.messagingSenderId,
+    appId: web.appId,
+    measurementId: web.measurementId,
+  };
+  
+  firebase.initializeApp(firebaseConfig);
+</script>
 
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
